@@ -1,0 +1,223 @@
+#include <iostream>
+
+struct Double_Node{
+
+    int data;
+
+    Double_Node* next;
+
+    Double_Node* prev;
+
+    Double_Node(int d):data(d),next(nullptr),prev(nullptr){}
+
+};
+
+struct double_linked_list{
+
+    Double_Node* head;
+
+    Double_Node* tail;
+
+    int len;
+
+    double_linked_list():head(nullptr), tail(nullptr),len(0){}
+
+    void push_front(int x){
+
+        Double_Node* nuevo = new Double_Node(x);
+
+        if(head==nullptr){
+
+            head = nuevo;
+            tail = nuevo;
+            len++;
+
+            return;
+        }
+
+        nuevo->next = head;
+
+        head->prev = nuevo;
+
+        head = nuevo;
+
+        len++;
+
+    }
+
+    void push_back(int x){
+
+        Double_Node* nuevo = new Double_Node(x);
+
+        if(head==nullptr){
+
+            head = nuevo;
+            tail = nuevo;
+            len++;
+
+            return;
+        }
+
+        nuevo->prev = tail;
+
+        tail->next = nuevo;
+
+        tail = nuevo;
+
+        len++;
+
+    }
+
+    void pop_front(){
+
+        if(head==nullptr){
+
+            return;
+        }
+
+        if(head->next == nullptr){
+
+            delete head;
+
+            head = nullptr;
+            tail = nullptr;
+
+            len--;
+
+            return;
+        }
+
+        Double_Node* eliminar = head;
+
+        head = head->next;
+
+        head->prev = nullptr;
+
+        delete eliminar;
+
+        len--;
+
+    }
+
+    void pop_back(){
+
+        if(head==nullptr){
+
+            return;
+        }
+
+        if(head->next == nullptr){
+
+            delete head;
+
+            head = nullptr;
+            tail = nullptr;
+
+            len--;
+
+            return;
+        }
+
+        Double_Node* eliminar = tail;
+
+        tail = tail->prev;
+
+        tail->next = nullptr;
+
+        delete eliminar;
+
+        len--;
+
+    }
+
+    void delete_x(int x){
+
+        Double_Node* iterador = head;
+
+        while(iterador != nullptr && iterador->data != x){
+
+            iterador = iterador->next;
+        }
+
+        if(iterador == nullptr){
+
+            return;
+        }
+
+        if(iterador->prev != nullptr){
+
+            iterador->prev->next = iterador->next;
+        }
+
+        else{
+
+            head = iterador->next;
+        }
+
+        if(iterador->next != nullptr){
+
+            iterador->next->prev = iterador->prev;
+        }
+
+        else{
+
+            tail = iterador->prev;
+        }
+
+        delete iterador;
+
+        len--;
+    }
+
+    void print() {
+
+        Double_Node* iterador = head;
+
+        bool first = true;
+
+        while (iterador != nullptr) {
+
+            if (!first) {
+
+                std::cout << " ";
+            }
+
+            std::cout << iterador->data;
+
+            first = false;
+
+            iterador = iterador->next;
+        }
+
+        std::cout << '\n';
+    }
+
+};
+int main(){
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    double_linked_list list;
+    int n = 0;
+    std::cin>> n;
+    for(int i = 0; i <  n;i++){
+        std::string in = "";
+        std::cin>> in;
+        int x = 0;
+        if(in == "insert"){
+            std::cin>>x;
+            list.push_front(x);
+        } else if(in == "delete"){
+            std::cin>>x;
+            list.delete_x(x);
+        } else if  (in == "deleteFirst"){
+            list.pop_front();
+        } else if(in == "deleteLast"){
+            list.pop_back();
+        }
+    }
+    list.print();
+
+    return 0;
+}
+
+//g++ double_linked_list.cpp -o double_linked_list.exe
