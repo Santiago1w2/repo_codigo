@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <set>
+#include <queue>
 
 struct Node
 {
@@ -32,7 +32,7 @@ struct HashTable
     }
     int hash(int k)
     {
-        return k % m;
+        return (k%m+m) % m;
     }
     void insert(int k, int v)
     {
@@ -41,21 +41,9 @@ struct HashTable
         }
         Node *new_node = new Node(k, v);
         int p = hash(k);
-        if (A[p] == nullptr)
-        {
-            n++;
-            A[p] = new_node;
-        }
-        else
-        {
-            Node *temp = A[p];
-            while (temp->next != nullptr)
-            {
-                temp = temp->next;
-            }
-            temp->next = new_node;
-            n++;
-        }
+        new_node->next=A[p];
+        A[p]=new_node;
+        n++;
     }
     int search(int k)
     {
@@ -131,68 +119,30 @@ struct HashTable
 };
 
 int main(){
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-    HashTable A(100);
-    HashTable B(100);
-    int n = 0, m = 0;
-    std::vector<int> nore;
+    HashTable map(100);
+    std::queue<int> cola;
+    int n = 0;
     std::cin>>n;
-    for(int i = 0; i < n ; i++){
+    for(int i = 0; i < n; i ++){
         int c = 0;
         std::cin>>c;
-        if(A.search(c)!=-1){
-            int temp = A.search(c);
-            A.erase(c);
-            A.insert(c,temp+1);
+        if(map.search(c)!=-1){
+            int temp = map.search(c);
+            map.erase(c);
+            map.insert(c,temp+1);
         } else {
-            A.insert(c,1);
-            nore.push_back(c);
+            map.insert(c,1);
+            cola.push(c);
+        } 
+    }
+    while(!cola.empty()){
+        int rept = map.search(cola.front());
+        if(rept==1){
+            std::cout << cola.front();
+            return 0;
         }
-        
+        cola.pop();
     }
-    std::cin>>m;
-    for(int i = 0; i < m ; i++){
-        int c = 0;
-        std::cin>>c;
-        if(B.search(c)!=-1){
-            int temp = B.search(c);
-            B.erase(c);
-            B.insert(c,temp+1);
-        } else {
-            B.insert(c,1);
-        }
-        
-    }
-    std::vector<int> al(2,0);
-
-    for(auto alt: nore){
-        if(A.search(alt)==B.search(alt)){
-            al[0]+=1;
-        } else{
-            al[1]+=1;
-        }
-    }
-    if(al[1]==0){
-        std::cout << "SI";
-    } else {
-        std::cout << "NO";
-    }
+    std::cout << -1;
     return 0;
 }
-/*
-0| |->
-1| |->
-2| |->
-3| |->
-4| |->
-5| |->
-6| |->
-
-
-
-
-
-
-*/
-//g++ teo1.cpp -o teo1.exe

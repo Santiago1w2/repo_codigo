@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <set>
-
+#include <utility>
 struct Node
 {
     Node *next;
@@ -32,7 +31,7 @@ struct HashTable
     }
     int hash(int k)
     {
-        return k % m;
+        return (k%m+m) % m;
     }
     void insert(int k, int v)
     {
@@ -41,21 +40,9 @@ struct HashTable
         }
         Node *new_node = new Node(k, v);
         int p = hash(k);
-        if (A[p] == nullptr)
-        {
-            n++;
-            A[p] = new_node;
-        }
-        else
-        {
-            Node *temp = A[p];
-            while (temp->next != nullptr)
-            {
-                temp = temp->next;
-            }
-            temp->next = new_node;
-            n++;
-        }
+        new_node->next=A[p];
+        A[p]=new_node;
+        n++;
     }
     int search(int k)
     {
@@ -129,54 +116,41 @@ struct HashTable
         A = A_new;
     }
 };
-
 int main(){
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
-    HashTable A(100);
-    HashTable B(100);
-    int n = 0, m = 0;
-    std::vector<int> nore;
-    std::cin>>n;
-    for(int i = 0; i < n ; i++){
-        int c = 0;
-        std::cin>>c;
-        if(A.search(c)!=-1){
-            int temp = A.search(c);
-            A.erase(c);
-            A.insert(c,temp+1);
+    HashTable map(2000003);
+    int q = 0;
+    std::cin>>q;
+    std::vector<std::pair<int,int>> comandos;
+    for(int i = 0; i < q; i++){
+        std::string comando = "";
+        std::cin>>comando;
+        if(comando=="INSERTAR"){//!
+            int k = 0, v = 0;
+            std::cin>>k>>v;
+            map.insert(k,v);
+        } else if(comando=="BUSCAR"){//2
+            int k = 0;
+            std::cin>>k;
+            if(map.search(k)!=-1){//21
+                int temp = map.search(k);
+                comandos.push_back({21,temp});
+            } else {
+                comandos.push_back({22,0});
+            }
+        } else if(comando == "ELIMINAR"){//3
+            int k = 0;
+            std::cin>>k;
+            map.erase(k);
+        }
+    }
+    for(int i = 0; i< comandos.size(); i++){
+        if(comandos[i].first==21){
+            std::cout <<comandos[i].second<<"\n";
         } else {
-            A.insert(c,1);
-            nore.push_back(c);
+            std::cout <<"NO EXISTE"<<"\n";
         }
-        
-    }
-    std::cin>>m;
-    for(int i = 0; i < m ; i++){
-        int c = 0;
-        std::cin>>c;
-        if(B.search(c)!=-1){
-            int temp = B.search(c);
-            B.erase(c);
-            B.insert(c,temp+1);
-        } else {
-            B.insert(c,1);
-        }
-        
-    }
-    std::vector<int> al(2,0);
-
-    for(auto alt: nore){
-        if(A.search(alt)==B.search(alt)){
-            al[0]+=1;
-        } else{
-            al[1]+=1;
-        }
-    }
-    if(al[1]==0){
-        std::cout << "SI";
-    } else {
-        std::cout << "NO";
     }
     return 0;
 }
