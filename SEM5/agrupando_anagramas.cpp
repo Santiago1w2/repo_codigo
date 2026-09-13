@@ -1,16 +1,16 @@
 #include <iostream>
 #include <vector>
-#include <set>
+#include <algorithm>
 
 struct Node
 {
     Node *next;
-    int key;
+    std::string key;
     int value;
     Node()
     {
     }
-    Node(int _key, int _value)
+    Node(std::string _key, int _value)
     {
         next = nullptr;
         key = _key;
@@ -30,34 +30,26 @@ struct HashTable
         for (int i = 0; i < m; i++)
             A[i] = nullptr;
     }
-    int hash(int k)
+    int hash(std::string k)
     {
-        return k % m;
+        unsigned long long h = 0;
+        for(char c: k){
+            h = h*31+c;
+        }
+        return h % m;
     }
-    void insert(int k, int v)
+    void insert(std::string k, int v)
     {
         if((double)n/m>=0.75){
             rehashing();
         }
         Node *new_node = new Node(k, v);
         int p = hash(k);
-        if (A[p] == nullptr)
-        {
-            n++;
-            A[p] = new_node;
-        }
-        else
-        {
-            Node *temp = A[p];
-            while (temp->next != nullptr)
-            {
-                temp = temp->next;
-            }
-            temp->next = new_node;
-            n++;
-        }
+        new_node->next=A[p];
+        A[p]=new_node;
+        n++;
     }
-    int search(int k)
+    int search(std::string k)
     {
         int p = hash(k);
         if (A[p] == nullptr)
@@ -78,7 +70,7 @@ struct HashTable
             return -1;
         }
     }
-    void erase(int k)
+    void erase(std::string k)
     {
         int p = hash(k);
         Node *temp = A[p];
@@ -129,55 +121,24 @@ struct HashTable
         A = A_new;
     }
 };
-
 int main(){
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
-    HashTable A(100);
-    HashTable B(100);
-    int n = 0, m = 0;
-    std::vector<int> nore;
+    HashTable map(2000003);
+    int n = 0;
     std::cin>>n;
-    for(int i = 0; i < n ; i++){
-        int c = 0;
-        std::cin>>c;
-        if(A.search(c)!=-1){
-            int temp = A.search(c);
-            A.erase(c);
-            A.insert(c,temp+1);
-        } else {
-            A.insert(c,1);
-            nore.push_back(c);
-        }
-        
-    }
-    std::cin>>m;
-    for(int i = 0; i < m ; i++){
-        int c = 0;
-        std::cin>>c;
-        if(B.search(c)!=-1){
-            int temp = B.search(c);
-            B.erase(c);
-            B.insert(c,temp+1);
-        } else {
-            B.insert(c,1);
-        }
-        
-    }
-    std::vector<int> al(2,0);
-
-    for(auto alt: nore){
-        if(A.search(alt)==B.search(alt)){
-            al[0]+=1;
-        } else{
-            al[1]+=1;
+    int contador = 0;
+    for(int i = 0; i < n; i++){
+        std::string input = "";
+        std::cin>>input;
+        std::sort(input.begin(), input.end());
+        int temp = map.search(input);
+        if(temp==-1){
+            map.insert(input,1);
+            contador++;
         }
     }
-    if(al[1]==0){
-        std::cout << "SI";
-    } else {
-        std::cout << "NO";
-    }
+    std::cout<< contador;
     return 0;
 }
 /*
