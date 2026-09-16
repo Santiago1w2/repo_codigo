@@ -178,7 +178,7 @@ struct HashTable
     {
         unsigned long long h = 0;
         for(char c: k){
-            h = h*31+c;
+            h = h*132+c;
         }
         return h % m;
     }
