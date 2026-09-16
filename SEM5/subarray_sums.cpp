@@ -4,12 +4,12 @@
 struct Node
 {
     Node *next;
-    int key;
+    long long key;
     int value;
     Node()
     {
     }
-    Node(int _key, int _value)
+    Node(long long _key, int _value)
     {
         next = nullptr;
         key = _key;
@@ -29,11 +29,11 @@ struct HashTable
         for (int i = 0; i < m; i++)
             A[i] = nullptr;
     }
-    int hash(int k)
+    int hash(long long k)
     {
         return (k%m+m) % m;
     }
-    void insert(int k, int v)
+    void insert(long long k, int v)
     {
         if((double)n/m>=0.75){
             rehashing();
@@ -44,7 +44,7 @@ struct HashTable
         A[p]=new_node;
         n++;
     }
-    int search(int k)
+    int search(long long k)
     {
         int p = hash(k);
         if (A[p] == nullptr)
@@ -65,7 +65,7 @@ struct HashTable
             return -1;
         }
     }
-    void erase(int k)
+    void erase(long long k)
     {
         int p = hash(k);
         Node *temp = A[p];
@@ -119,7 +119,44 @@ struct HashTable
 int main(){
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
-    HashTable map(100);
+    HashTable map(200003);
+    int n = 0;
+    long long x = 0;
+    std::cin>>n>>x;
+    long long suma = 0;
+long long contador = 0;
+
+map.insert(0, 1);
+
+for(int i = 0; i < n; i++)
+{
+    long long num;
+    std::cin >> num;
+
+    suma += num;
+
+    // ¿Cuántas veces apareció suma - x?
+    int veces = map.search(suma - x);
+
+    if(veces != -1)
+    {
+        contador += veces;
+    }
+
+    // Registrar suma actual
+    int actual = map.search(suma);
+
+    if(actual == -1)
+    {
+        map.insert(suma, 1);
+    }
+    else
+    {
+        map.erase(suma);
+        map.insert(suma, actual + 1);
+    }
+}
+    std::cout << contador;
     return 0;
 }
 /*
