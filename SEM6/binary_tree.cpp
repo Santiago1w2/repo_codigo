@@ -141,12 +141,9 @@ Node* maximo(Node* root) {
 bool esPerfecto(Node* root) {
     if (root == nullptr)
         return true;
-
     int h = altura(root);
     int cantidad = size(root);
-
     int esperado = (1 << (h + 1)) - 1;
-
     return cantidad == esperado;
 }
 
@@ -166,95 +163,56 @@ Node* predecesor(Node* nodo) {
 
     if (nodo == nullptr)
         return nullptr;
-
     if (nodo->izq != nullptr) {
         return maximo(nodo->izq);
     }
-
     Node* padre = nodo->father;
-
     while (padre != nullptr && nodo == padre->izq) {
         nodo = padre;
         padre = padre->father;
     }
-
     return padre;
 }
-Node* eliminar(Node* root, int valor) {
 
+Node* eliminar(Node* root, int valor) {
     if (root == nullptr)
         return nullptr;
-
-
-    // Buscar por izquierda
     if (valor < root->data) {
-
         root->izq = eliminar(root->izq, valor);
-
         if (root->izq != nullptr)
             root->izq->father = root;
     }
-
-
-    // Buscar por derecha
     else if (valor > root->data) {
-
         root->der = eliminar(root->der, valor);
-
         if (root->der != nullptr)
             root->der->father = root;
     }
-
-
     else {
-
-        // CASO 1 y CASO 2:
-        // No tiene hijo izquierdo
         if (root->izq == nullptr) {
-
             Node* temp = root->der;
-
             if (temp != nullptr)
                 temp->father = root->father;
-
             delete root;
-
             return temp;
         }
-
-
-        // CASO 2:
-        // No tiene hijo derecho
         else if (root->der == nullptr) {
-
             Node* temp = root->izq;
-
             if (temp != nullptr)
                 temp->father = root->father;
-
             delete root;
-
             return temp;
         }
-
-
-        // CASO 3:
-        // Tiene DOS hijos
         else {
-
             Node* pred = maximo(root->izq);
-
             root->data = pred->data;
-
             root->izq = eliminar(root->izq, pred->data);
-
             if (root->izq != nullptr)
                 root->izq->father = root;
         }
     }
-
     return root;
 }
+
 public:
 
     binary_tree() : root(nullptr) {}

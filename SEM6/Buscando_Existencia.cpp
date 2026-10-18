@@ -23,6 +23,7 @@ class binary_tree {
             return buscar(root->izq, a);
         }
         return buscar(root->der, a);
+        
     }
 Node* maximo(Node* root) {
 

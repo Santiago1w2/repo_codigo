@@ -119,9 +119,7 @@ struct HashTable
         A = A_new;
     }
 };
-class Solution {
-public:
-    int numJewelsInStones(string jewels, string stones) {
+int numJewelsInStones(std::string jewels, std::string stones) {
         HashTable map(50);
         int contador = 0;
         for(int i = 0; i < jewels.size(); i++){
@@ -141,11 +139,12 @@ public:
         }
         return contador;
     }
-};
 
 int main(){
-    Solution sol;
-    cout << sol.numJewelsInStones("aA","aAAbbbbbb");
-
+    HashTable(2000003);
+    std::string J = "", S="";
+    std::cin>>J;
+    std::cin>>S;
+    cout << numJewelsInStones(J,S);
     return 0;
 }

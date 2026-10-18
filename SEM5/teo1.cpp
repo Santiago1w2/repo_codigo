@@ -119,7 +119,7 @@ struct HashTable
 int main(){
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
-    HashTable map(100);
+    HashTable map(200003);
     return 0;
 }
 /*
@@ -178,7 +178,7 @@ struct HashTable
     {
         unsigned long long h = 0;
         for(char c: k){
-            h = h*31+c;
+            h = h*132+c;
         }
         return h % m;
     }
