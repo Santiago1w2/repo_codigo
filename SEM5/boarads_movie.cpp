@@ -7,11 +7,9 @@ struct Node
     Node *next;
     int key;
     long long value;
-
     Node()
     {
     }
-
     Node(int _key, long long _value)
     {
         next = nullptr;
