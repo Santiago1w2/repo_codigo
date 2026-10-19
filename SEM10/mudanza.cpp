@@ -15,13 +15,10 @@ void backtracking(int i) {
         respuesta = min(respuesta, maximo);
         return;
     }
-
     for (int persona = 0; persona < 3; persona++) {
         // Asignar la caja i a esta persona
         peso[persona] += w[i];
-
         backtracking(i + 1); //Avanzar
-
         // Deshacer la asignación
         peso[persona] -= w[i];
     }
