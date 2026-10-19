@@ -11,30 +11,24 @@ struct Nodo {
     int altura;
     Nodo* izq;
     Nodo* der;
-
     Nodo(int k) : clave(k), altura(0), izq(nullptr), der(nullptr) {}
 };
-
 class AVLTree {
 private:
     Nodo* raiz;
-
     int h(Nodo* v) {
         if (v == nullptr) return -1;
         return v->altura;
     }
-
     void actualizar(Nodo* v) {
         if (v != nullptr) {
             v->altura = 1 + max(h(v->izq), h(v->der));
         }
     }
-
     int FB(Nodo* v) {
         if (v == nullptr) return 0;
         return h(v->izq) - h(v->der);
     }
-
     Nodo* rotarDerecha(Nodo* y) {
         Nodo* x = y->izq;
         y->izq = x->der;
@@ -45,7 +39,6 @@ private:
         
         return x;
     }
-
     Nodo* rotarIzquierda(Nodo* x) {
         Nodo* y = x->der;
         x->der = y->izq;
@@ -56,7 +49,6 @@ private:
         
         return y;
     }
-
     Nodo* rebalancear(Nodo* v) {
         if (v == nullptr) return nullptr;
         
@@ -78,7 +70,6 @@ private:
         
         return v;
     }
-
     Nodo* insertar(Nodo* v, int k) {
         if (v == nullptr) {
             return new Nodo(k);
@@ -94,7 +85,6 @@ private:
         
         return rebalancear(v);
     }
-
     Nodo* minimo(Nodo* v) {
         Nodo* actual = v;
         while (actual && actual->izq != nullptr) {
@@ -102,7 +92,6 @@ private:
         }
         return actual;
     }
-
     Nodo* eliminar(Nodo* v, int k) {
         if (v == nullptr) return nullptr;
         
@@ -127,7 +116,6 @@ private:
         
         return rebalancear(v);
     }
-
     int verificar(Nodo* v, long long lo, long long hi) {
         if (v == nullptr) return -1;
         
@@ -150,19 +138,15 @@ private:
     }
 public:
     AVLTree() : raiz(nullptr) {}
-
     void insertar(int k) {
         raiz = insertar(raiz, k);
     }
-
     void eliminar(int k) {
         raiz = eliminar(raiz, k);
     }
-
     bool esValidoAVL() {
         return verificar(raiz, LLONG_MIN, LLONG_MAX) != FALLA;
     }
-
     void imprimir() {
         inorden(raiz);
         cout << endl;
