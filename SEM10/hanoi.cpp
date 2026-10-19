@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+
 void hanoi(int n,int origin, int auxiliar, int destino){
     if(n == 0){
         return;

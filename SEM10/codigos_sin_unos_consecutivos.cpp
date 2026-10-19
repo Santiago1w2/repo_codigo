@@ -29,11 +29,9 @@ void backtracking(int a) {
         }
         return;
     }
-
     cadena.push_back('0');
     backtracking(a + 1);
     cadena.pop_back();
-
     cadena.push_back('1');
     backtracking(a + 1);
     cadena.pop_back();
