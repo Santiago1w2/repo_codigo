@@ -115,7 +115,6 @@ int main() {
     cin.tie(nullptr);
     int n, m, k;
     cin >> n >> m>> k;
-
     Grafo g(n, false);
     vector<int> hospitales(k);
     for(int i = 0; i < k;i++){
