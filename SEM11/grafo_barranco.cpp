@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_set>
 #include <fstream>
+#include <queue>
 using namespace std;
 
 struct Arista {
